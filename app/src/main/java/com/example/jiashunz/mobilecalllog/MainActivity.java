@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<Call> calls = new ArrayList<>();
 
-        Log.i("breakpoint", "here");
+        //Log.i("breakpoint", "here");
 
         //cursor = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
         Cursor cursor = managedQuery(CallLog.Calls.CONTENT_URI, null, null, null, null);
@@ -73,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
         int numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);
         int dateIndex = cursor.getColumnIndex(CallLog.Calls.DATE);
         int directionIndex = cursor.getColumnIndex(CallLog.Calls.TYPE);
+        int total = 0;
 
-        while (cursor.moveToNext()) {
+        while (cursor.moveToNext() && total < 50) {
+            total++;
             String phoneNumber = cursor.getString(numberIndex);
             String date = cursor.getString(dateIndex);
             String callDirection = cursor.getString(directionIndex);
