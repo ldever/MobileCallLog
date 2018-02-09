@@ -7,8 +7,6 @@ package com.example.jiashunz.mobilecalllog;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 public class Call implements Parcelable {
     public String phoneNumber;
     public String timeStamp;

@@ -3,20 +3,14 @@ package com.example.jiashunz.mobilecalllog;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.CallLog;
-import android.util.Log;
 import android.Manifest;
-
-
-import com.example.jiashunz.mobilecalllog.Call;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         setupUI();
     }
 
+    /**
+     * This method is used to set up refresh listener on swipeRefreshLayout.
+     */
     private void setupRefreshListener() {
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -49,16 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method is used to refresh call list.
+     */
     private void refreshList() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.call_recycler_view);
 
         List<Call> calls = getData();
-
+        //Update list view
         recyclerView.setAdapter(new CallListAdapter(calls));
 
         onRefreshComplete();
     }
 
+    /**
+     * This method is used to stop refresh animation
+     */
     private void onRefreshComplete() {
         refreshLayout.setRefreshing(false);
     }
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
            calls = getData();
         }
-
+        //Update list view
         recyclerView.setAdapter(new CallListAdapter(calls));
     }
 
@@ -89,14 +92,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * This method is used to get call list from cell phone
+     * @return a list of calls
+     */
     @NonNull
     private List<Call> getData() {
 
         List<Call> calls = new ArrayList<>();
 
-        //Log.i("breakpoint", "here");
-
-        //cursor = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
         Cursor cursor = managedQuery(CallLog.Calls.CONTENT_URI, null, null, null, null);
 
         int numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER);

@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jiashunz.mobilecalllog.Call;
-
 import java.util.List;
 
 /**
@@ -35,6 +33,10 @@ public class CallListAdapter extends RecyclerView.Adapter {
         ((CallListViewHolder) holder).callDirectionTextView.setText(call.callDirection);
     }
 
+    /**
+     * This method is used to return data size.
+     * @return data size
+     */
     public int getItemCount() {
         return data.size();
     }
