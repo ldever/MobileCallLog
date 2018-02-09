@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,13 +26,41 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     final int PERMISSIONS_REQUEST_READ_CALL_LOG = 1;
     final String PERMISSIONS_READ_CALL_LOG = "android.permission.READ_CALL_LOG";
+    SwipeRefreshLayout refreshLayout = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupRefreshListener();
         setupUI();
+    }
+
+    private void setupRefreshListener() {
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshList();
+            }
+        });
+
+    }
+
+    private void refreshList() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.call_recycler_view);
+
+        List<Call> calls = getData();
+
+        recyclerView.setAdapter(new CallListAdapter(calls));
+
+        onRefreshComplete();
+    }
+
+    private void onRefreshComplete() {
+        refreshLayout.setRefreshing(false);
     }
 
     private void setupUI() {
